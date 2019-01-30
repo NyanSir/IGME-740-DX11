@@ -5,6 +5,7 @@
 #include <DirectXMath.h>
 
 #include "Mesh.h"
+#include "GameEntity.h"
 
 class Game 
 	: public DXCore
@@ -49,5 +50,8 @@ private:
 	Mesh* triangle;
 	Mesh* square;
 	Mesh* hexagon;
+
+	GameEntity* gameEntities[5];
+
 };
 
