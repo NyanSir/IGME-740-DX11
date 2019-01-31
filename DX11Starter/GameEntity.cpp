@@ -11,11 +11,12 @@ GameEntity::GameEntity(Mesh* mesh)
 {
 	this->mesh = mesh;
 
+	transVector = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	rotVector = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	scaleVector = XMFLOAT3(1.0f, 1.0f, 1.0f);
+
 	XMMATRIX W = XMMatrixIdentity();
 	XMStoreFloat4x4(&worldMatrix, XMMatrixTranspose(W));
-	XMStoreFloat4x4(&transMatrix, XMMatrixTranspose(W));
-	XMStoreFloat4x4(&rotMatrix, XMMatrixTranspose(W));
-	XMStoreFloat4x4(&scaleMatrix, XMMatrixTranspose(W));
 	
 	isWorldMatrixChanged = false;
 }
@@ -54,7 +55,6 @@ void GameEntity::SetScale(float x, float y, float z)
 XMFLOAT4X4 GameEntity::GetWorldMatrix()
 {
 	if (isWorldMatrixChanged) {
-		XMVECTOR sv = XMLoadFloat3(&scaleVector);
 		XMMATRIX trans = XMMatrixTranslation(transVector.x, transVector.y, transVector.z);
 		XMMATRIX rot = XMMatrixRotationRollPitchYaw(rotVector.x, rotVector.y, rotVector.z);
 		XMMATRIX scale = XMMatrixScaling(scaleVector.x, scaleVector.y, scaleVector.z);

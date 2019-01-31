@@ -196,11 +196,11 @@ void Game::CreateBasicGeometry()
 	int hexagonIndices[] = { 0, 1, 2, 0, 2, 3, 0, 3, 4, 0, 4, 5, 0, 5, 6, 0, 6, 1 };
 	hexagon = new Mesh(hexagonVertices, 7, hexagonIndices, 18, device);
 	
-	gameEntities[0] = new GameEntity(triangle);
-	gameEntities[1] = new GameEntity(square);
-	gameEntities[2] = new GameEntity(square);
-	gameEntities[3] = new GameEntity(hexagon);
-	gameEntities[4] = new GameEntity(hexagon);
+	gameEntities[0] = new GameEntity(hexagon);
+	gameEntities[1] = new GameEntity(hexagon);
+	gameEntities[2] = new GameEntity(triangle);
+	gameEntities[3] = new GameEntity(square);
+	gameEntities[4] = new GameEntity(square);
 }
 
 
@@ -233,17 +233,19 @@ void Game::Update(float deltaTime, float totalTime)
 
 	float sinTime = (sin(totalTime * 2.0f) + 5.0f) / 10.0f;
 
+	gameEntities[0]->SetTranslation(sin(totalTime), sin(totalTime), 0);
 	gameEntities[0]->SetRotation(0, 0, totalTime);
-	gameEntities[0]->SetScale(0.5f, 0.5f, 0.5f);
+	gameEntities[0]->SetScale(sinTime, sinTime, sinTime);
 
-	gameEntities[1]->SetTranslation(0, sin(totalTime), 0);
+	gameEntities[1]->SetTranslation(-totalTime / 2.0f, 0, 0);
 
-	gameEntities[2]->SetTranslation(2, 0, 0);
-	gameEntities[2]->SetScale(sinTime, sinTime, sinTime);
+	gameEntities[2]->SetRotation(0, 0, totalTime);
+	gameEntities[2]->SetScale(0.5f, 0.5f, 0.5f);
 
-	gameEntities[3]->SetTranslation(-deltaTime * 2.0f, 0, 0);
+	gameEntities[3]->SetTranslation(2, 0, 0);
+	gameEntities[3]->SetScale(sinTime, sinTime, sinTime);
 
-	gameEntities[4]->SetTranslation(0, 0, 0);
+	gameEntities[4]->SetTranslation(0, sin(totalTime), 0);
 }
 
 // --------------------------------------------------------
@@ -295,7 +297,7 @@ void Game::Draw(float deltaTime, float totalTime)
 		ID3D11Buffer* vBuffer = gameEntities[i]->mesh->GetVertexBuffer();
 		context->IASetVertexBuffers(0, 1, &vBuffer, &stride, &offset);
 		context->IASetIndexBuffer(gameEntities[i]->mesh->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
-
+		
 		// Finally do the actual drawing
 		//  - Do this ONCE PER OBJECT you intend to draw
 		//  - This will use all of the currently set DirectX "stuff" (shaders, buffers, etc)
