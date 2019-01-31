@@ -231,10 +231,18 @@ void Game::Update(float deltaTime, float totalTime)
 	if (GetAsyncKeyState(VK_ESCAPE))
 		Quit();
 
-	gameEntities[0]->SetTranslation(0, 0, 0);
-	gameEntities[1]->SetTranslation(0, 0, 0);
-	gameEntities[2]->SetTranslation(0, 0, 0);
-	gameEntities[3]->SetTranslation(0, 0, 0);
+	float sinTime = (sin(totalTime * 2.0f) + 5.0f) / 10.0f;
+
+	gameEntities[0]->SetRotation(0, 0, totalTime);
+	gameEntities[0]->SetScale(0.5f, 0.5f, 0.5f);
+
+	gameEntities[1]->SetTranslation(0, sin(totalTime), 0);
+
+	gameEntities[2]->SetTranslation(2, 0, 0);
+	gameEntities[2]->SetScale(sinTime, sinTime, sinTime);
+
+	gameEntities[3]->SetTranslation(-deltaTime * 2.0f, 0, 0);
+
 	gameEntities[4]->SetTranslation(0, 0, 0);
 }
 

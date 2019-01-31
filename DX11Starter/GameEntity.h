@@ -25,13 +25,10 @@ public:
 
 private:
 	XMFLOAT4X4 worldMatrix;
-	XMFLOAT4X4 transMatrix;
-	XMFLOAT4X4 rotMatrix;
-	XMFLOAT4X4 scaleMatrix;
 
-	XMFLOAT3 positionVector;
+	XMFLOAT3 transVector;
 	XMFLOAT3 scaleVector;
-	XMFLOAT3 rotationVector;
+	XMFLOAT3 rotVector;
 
 	bool isWorldMatrixChanged;
 

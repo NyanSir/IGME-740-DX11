@@ -32,29 +32,33 @@ void GameEntity::SetWorldMatrix(XMFLOAT4X4 matrix)
 
 void GameEntity::SetTranslation(float x, float y, float z)
 {	
-	XMStoreFloat4x4(&transMatrix, XMMatrixTranslation(x, y, z));
+	XMVECTOR v = { x, y, z };
+	XMStoreFloat3(&transVector, v);
 	isWorldMatrixChanged = true;
 }
 
 void GameEntity::SetRotation(float x, float y, float z)
 {
-	XMStoreFloat4x4(&rotMatrix, XMMatrixTranslation(x, y, z));
+	XMVECTOR v = { x, y, z };
+	XMStoreFloat3(&rotVector, v);
 	isWorldMatrixChanged = true;
 }
 
 void GameEntity::SetScale(float x, float y, float z)
 {
-	XMStoreFloat4x4(&scaleMatrix, XMMatrixScaling(x, y, z));
+	XMVECTOR v = {x, y, z};
+	XMStoreFloat3(&scaleVector, v);
 	isWorldMatrixChanged = true;
 }
 
 XMFLOAT4X4 GameEntity::GetWorldMatrix()
 {
 	if (isWorldMatrixChanged) {
-		XMMATRIX trans = XMLoadFloat4x4(&transMatrix);
-		XMMATRIX rot = XMLoadFloat4x4(&rotMatrix);
-		XMMATRIX scale = XMLoadFloat4x4(&scaleMatrix);
-		XMStoreFloat4x4(&worldMatrix, XMMatrixTranspose(trans * rot * scale));
+		XMVECTOR sv = XMLoadFloat3(&scaleVector);
+		XMMATRIX trans = XMMatrixTranslation(transVector.x, transVector.y, transVector.z);
+		XMMATRIX rot = XMMatrixRotationRollPitchYaw(rotVector.x, rotVector.y, rotVector.z);
+		XMMATRIX scale = XMMatrixScaling(scaleVector.x, scaleVector.y, scaleVector.z);
+		XMStoreFloat4x4(&worldMatrix, XMMatrixTranspose(scale * rot * trans));
 		isWorldMatrixChanged = false;
 	}
 	return worldMatrix;
