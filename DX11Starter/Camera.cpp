@@ -83,12 +83,14 @@ void Camera::Update(float deltaTime, float totalTime)
 
 	if (GetAsyncKeyState(VK_SPACE) & 0x8000)
 	{
-		
+		XMVECTOR offsetVector = XMVectorSet(0, deltaTime, 0, 0);
+		XMStoreFloat3(&cameraPosition, posVector + offsetVector);
 	}
 
-	if (GetAsyncKeyState('D') & 0x8000)
+	if (GetAsyncKeyState('X') & 0x8000)
 	{
-		
+		XMVECTOR offsetVector = XMVectorSet(0, -deltaTime, 0, 0);
+		XMStoreFloat3(&cameraPosition, posVector + offsetVector);
 	}
 }
 
