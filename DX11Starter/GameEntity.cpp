@@ -1,5 +1,4 @@
 #include "GameEntity.h"
-#include "Mesh.h"
 
 // For the DirectX Math library
 using namespace DirectX;

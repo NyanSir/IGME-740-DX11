@@ -11,6 +11,9 @@ public:
 	Material();
 	~Material();
 
+	SimpleVertexShader* GetVertexShader();
+	SimplePixelShader* GetPixelShader();
+
 private:
 	// Buffers to hold actual geometry data
 	SimpleVertexShader* vertexShader;
