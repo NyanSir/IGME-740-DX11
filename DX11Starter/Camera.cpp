@@ -34,58 +34,55 @@ void Camera::Update(float deltaTime, float totalTime)
 	XMVECTOR posVector = XMLoadFloat3(&cameraPosition);
 	XMVECTOR dirVector = XMLoadFloat3(&cameraDirection);
 
-	XMVECTOR rotVector = XMQuaternionRotationRollPitchYaw(rotationX, rotationY, 0);
-
-	XMVECTOR faceVector = XMVector3Rotate(dirVector, rotVector);
 	XMVECTOR upVector = XMVectorSet(0, 1, 0, 0);
+	XMVECTOR leftVector = XMVector3Normalize(XMVector3Cross(dirVector, upVector));
 
-	XMStoreFloat4x4(&viewMatrix, XMMatrixTranspose(XMMatrixLookToLH(posVector, faceVector, upVector)));
+	XMStoreFloat4x4(&viewMatrix, XMMatrixTranspose(XMMatrixLookToLH(posVector, dirVector, upVector)));
+
+	XMVECTOR offsetVector = XMVectorSet(0, 0, 0, 0);
 
 	if (GetAsyncKeyState('W') & 0x8000) 
 	{
-		XMVECTOR offsetVector = XMVectorSet(0, 0, deltaTime, 0);
-		offsetVector = XMVector3Rotate(offsetVector, rotVector);
-		XMStoreFloat3(&cameraPosition, posVector + offsetVector);
+		offsetVector += dirVector * deltaTime;
 	}
 	
 	if (GetAsyncKeyState('S') & 0x8000) 
 	{
-		XMVECTOR offsetVector = XMVectorSet(0, 0, -deltaTime, 0);
-		offsetVector = XMVector3Rotate(offsetVector, rotVector);
-		XMStoreFloat3(&cameraPosition, posVector + offsetVector);
+		offsetVector -= dirVector * deltaTime;
 	}
 
 	if (GetAsyncKeyState('A') & 0x8000)
 	{
-		XMVECTOR offsetVector = XMVector3Cross(faceVector, upVector);
-		offsetVector = XMVector3Normalize(offsetVector) * deltaTime;
-		XMStoreFloat3(&cameraPosition, posVector + offsetVector);
+		offsetVector += leftVector * deltaTime;
 	}
 
 	if (GetAsyncKeyState('D') & 0x8000)
 	{
-		XMVECTOR offsetVector = -XMVector3Cross(faceVector, upVector);
-		offsetVector = XMVector3Normalize(offsetVector) * deltaTime;
-		XMStoreFloat3(&cameraPosition, posVector + offsetVector);
+		offsetVector -= leftVector * deltaTime;
 	}
 
 	if (GetAsyncKeyState(VK_SPACE) & 0x8000)
 	{
-		XMVECTOR offsetVector = XMVectorSet(0, deltaTime, 0, 0);
-		XMStoreFloat3(&cameraPosition, posVector + offsetVector);
+		offsetVector += upVector * deltaTime;
 	}
 
 	if (GetAsyncKeyState('X') & 0x8000)
 	{
-		XMVECTOR offsetVector = XMVectorSet(0, -deltaTime, 0, 0);
-		XMStoreFloat3(&cameraPosition, posVector + offsetVector);
+		offsetVector -= upVector * deltaTime;
 	}
+	XMStoreFloat3(&cameraPosition, XMVectorAdd(posVector, offsetVector));
+
 }
 
 void Camera::RotateCamera(float x, float y)
 {
 	rotationX += x;
 	rotationY += y;
+
+	XMVECTOR rotVector = XMQuaternionRotationRollPitchYaw(rotationX, rotationY, 0);
+	XMVECTOR worldForward = XMVectorSet(0, 0, 1, 0);
+	XMVECTOR dirVector = XMVector3Rotate(worldForward, rotVector);
+	XMStoreFloat3(&cameraDirection, dirVector);
 }
 
 void Camera::UpdateProjectionMatrix(float width, float height)

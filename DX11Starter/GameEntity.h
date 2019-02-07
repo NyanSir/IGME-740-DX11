@@ -3,6 +3,7 @@
 #include <DirectXMath.h>
 
 #include "Mesh.h"
+#include "Material.h"
 
 using namespace DirectX;
 
@@ -10,10 +11,13 @@ class GameEntity
 {
 
 public:
-	GameEntity(Mesh* mesh);
+	GameEntity(Mesh* mesh, Material* material);
 	~GameEntity();
 
 	Mesh* mesh;
+	Material* material;
+
+	void PrepareMaterial(XMFLOAT4X4 viewMatrix, XMFLOAT4X4 projectionMatrix);
 
 	void SetWorldMatrix(XMFLOAT4X4 matrix) ;
 	void SetTranslation(float x, float y, float z);

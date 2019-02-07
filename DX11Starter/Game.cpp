@@ -63,6 +63,8 @@ Game::~Game()
 	}
 
 	delete camera;
+
+	delete defaultMaterial;
 }
 
 // --------------------------------------------------------
@@ -97,6 +99,8 @@ void Game::LoadShaders()
 
 	pixelShader = new SimplePixelShader(device, context);
 	pixelShader->LoadShaderFile(L"PixelShader.cso");
+
+	defaultMaterial = new Material(vertexShader, pixelShader);
 }
 
 
@@ -197,11 +201,11 @@ void Game::CreateBasicGeometry()
 	int hexagonIndices[] = { 0, 1, 2, 0, 2, 3, 0, 3, 4, 0, 4, 5, 0, 5, 6, 0, 6, 1 };
 	hexagon = new Mesh(hexagonVertices, 7, hexagonIndices, 18, device);
 	
-	gameEntities[0] = new GameEntity(hexagon);
-	gameEntities[1] = new GameEntity(hexagon);
-	gameEntities[2] = new GameEntity(triangle);
-	gameEntities[3] = new GameEntity(square);
-	gameEntities[4] = new GameEntity(square);
+	gameEntities[0] = new GameEntity(hexagon, defaultMaterial);
+	gameEntities[1] = new GameEntity(hexagon, defaultMaterial);
+	gameEntities[2] = new GameEntity(triangle, defaultMaterial);
+	gameEntities[3] = new GameEntity(square, defaultMaterial);
+	gameEntities[4] = new GameEntity(square, defaultMaterial);
 }
 
 
@@ -265,26 +269,7 @@ void Game::Draw(float deltaTime, float totalTime)
 	
 	for (int i = 0; i < 5; i++) 
 	{
-		// Send data to shader variables
-		//  - Do this ONCE PER OBJECT you're drawing
-		//  - This is actually a complex process of copying data to a local buffer
-		//    and then copying that entire buffer to the GPU.  
-		//  - The "SimpleShader" class handles all of that for you.
-		vertexShader->SetMatrix4x4("world", gameEntities[i]->GetWorldMatrix());
-		vertexShader->SetMatrix4x4("view", camera->GetViewMatrix());
-		vertexShader->SetMatrix4x4("projection", camera->GetProjectionMatrix());
-
-		// Once you've set all of the data you care to change for
-		// the next draw call, you need to actually send it to the GPU
-		//  - If you skip this, the "SetMatrix" calls above won't make it to the GPU!
-		vertexShader->CopyAllBufferData();
-
-		// Set the vertex and pixel shaders to use for the next Draw() command
-		//  - These don't technically need to be set every frame...YET
-		//  - Once you start applying different shaders to different objects,
-		//    you'll need to swap the current shaders before each draw
-		vertexShader->SetShader();
-		pixelShader->SetShader();
+		gameEntities[i]->PrepareMaterial(camera->GetViewMatrix(), camera->GetProjectionMatrix());
 
 		// Set buffers in the input assembler
 		//  - Do this ONCE PER OBJECT you're drawing, since each object might
@@ -357,7 +342,7 @@ void Game::OnMouseMove(WPARAM buttonState, int x, int y)
 	// Add any custom code here...
 	if (buttonState & 0x0002)
 	{ /* Right button is down */
-		camera->RotateCamera((y - prevMousePos.y) * 0.005f, (x - prevMousePos.x) * 0.005f);
+		camera->RotateCamera((y - prevMousePos.y) * 0.002f, (x - prevMousePos.x) * 0.002f);
 	}
 
 	// Save the previous mouse position, so we have it for the future
