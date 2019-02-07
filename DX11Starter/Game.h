@@ -6,6 +6,7 @@
 
 #include "Mesh.h"
 #include "GameEntity.h"
+#include "Camera.h"
 
 class Game 
 	: public DXCore
@@ -52,6 +53,8 @@ private:
 	Mesh* hexagon;
 
 	GameEntity* gameEntities[5];
+
+	Camera* camera;
 
 };
 

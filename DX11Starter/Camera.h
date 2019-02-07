@@ -11,10 +11,10 @@ class Camera
 {
 
 public:
-	Camera();
+	Camera(float width, float height);
 	~Camera();
 
-	void Update();
+	void Update(float deltaTime, float totalTime);
 
 	XMFLOAT4X4 GetViewMatrix();
 	XMFLOAT4X4 GetProjectionMatrix();

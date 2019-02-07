@@ -2,6 +2,7 @@
 #include "Vertex.h"
 #include "Mesh.h"
 #include "GameEntity.h"
+#include "Camera.h"
 
 // For the DirectX Math library
 using namespace DirectX;
@@ -34,6 +35,8 @@ Game::Game(HINSTANCE hInstance)
 		gameEntities[i] = 0;
 	}
 
+	camera = new Camera(width, height);
+
 #if defined(DEBUG) || defined(_DEBUG)
 	// Do we want a console window?  Probably only in debug mode
 	CreateConsoleWindow(500, 120, 32, 120);
@@ -62,6 +65,8 @@ Game::~Game()
 	{
 		delete gameEntities[i];
 	}
+
+	delete camera;
 }
 
 // --------------------------------------------------------
@@ -246,6 +251,8 @@ void Game::Update(float deltaTime, float totalTime)
 	gameEntities[3]->SetScale(sinTime, sinTime, sinTime);
 
 	gameEntities[4]->SetTranslation(0, sin(totalTime), 0);
+
+	camera->Update(deltaTime, totalTime);
 }
 
 // --------------------------------------------------------
@@ -274,8 +281,8 @@ void Game::Draw(float deltaTime, float totalTime)
 		//    and then copying that entire buffer to the GPU.  
 		//  - The "SimpleShader" class handles all of that for you.
 		vertexShader->SetMatrix4x4("world", gameEntities[i]->GetWorldMatrix());
-		vertexShader->SetMatrix4x4("view", viewMatrix);
-		vertexShader->SetMatrix4x4("projection", projectionMatrix);
+		vertexShader->SetMatrix4x4("view", camera->GetViewMatrix());
+		vertexShader->SetMatrix4x4("projection", camera->GetProjectionMatrix());
 
 		// Once you've set all of the data you care to change for
 		// the next draw call, you need to actually send it to the GPU
