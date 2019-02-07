@@ -8,7 +8,7 @@ class Material
 {
 
 public:
-	Material();
+	Material(SimpleVertexShader* vShader, SimplePixelShader* pShader);
 	~Material();
 
 	SimpleVertexShader* GetVertexShader();
