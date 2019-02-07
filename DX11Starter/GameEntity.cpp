@@ -1,6 +1,3 @@
-#include "DXCore.h"
-#include <DirectXMath.h>
-
 #include "GameEntity.h"
 #include "Mesh.h"
 

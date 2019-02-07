@@ -1,9 +1,5 @@
-#include "DXCore.h"
-#include <DirectXMath.h>
-
-#include "Windows.h"
-
 #include "Camera.h"
+#include "Windows.h"
 
 // For the DirectX Math library
 using namespace DirectX;
