@@ -25,15 +25,7 @@ Camera::Camera(float width, float height)
 		up);     // "Up" direction in 3D space (prevents roll)
 	XMStoreFloat4x4(&viewMatrix, XMMatrixTranspose(V)); // Transpose for HLSL!
 
-	// Create the Projection matrix
-	// - This should match the window's aspect ratio, and also update anytime
-	//    the window resizes (which is already happening in OnResize() below)
-	XMMATRIX P = XMMatrixPerspectiveFovLH(
-		0.25f * 3.1415926535f,		// Field of View Angle
-		(float)width / height,		// Aspect ratio
-		0.1f,						// Near clip plane distance
-		100.0f);					// Far clip plane distance
-	XMStoreFloat4x4(&projectionMatrix, XMMatrixTranspose(P)); // Transpose for HLSL!
+	UpdateProjectionMatrix(width, height);
 }
 
 Camera::~Camera()
@@ -92,6 +84,25 @@ void Camera::Update(float deltaTime, float totalTime)
 		XMVECTOR offsetVector = XMVectorSet(0, -deltaTime, 0, 0);
 		XMStoreFloat3(&cameraPosition, posVector + offsetVector);
 	}
+}
+
+void Camera::RotateCamera(float x, float y)
+{
+	rotationX += x;
+	rotationY += y;
+}
+
+void Camera::UpdateProjectionMatrix(float width, float height)
+{
+	// Update the Projection matrix
+	// - This should match the window's aspect ratio, and also update anytime
+	//    the window resizes (which is already happening in OnResize() below)
+	XMMATRIX P = XMMatrixPerspectiveFovLH(
+		0.25f * 3.1415926535f,		// Field of View Angle
+		width / height,				// Aspect ratio
+		0.1f,						// Near clip plane distance
+		100.0f);					// Far clip plane distance
+	XMStoreFloat4x4(&projectionMatrix, XMMatrixTranspose(P)); // Transpose for HLSL!
 }
 
 XMFLOAT4X4 Camera::GetProjectionMatrix()

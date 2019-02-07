@@ -35,7 +35,7 @@ Game::Game(HINSTANCE hInstance)
 		gameEntities[i] = 0;
 	}
 
-	camera = new Camera(width, height);
+	camera = new Camera((float)width, (float)height);
 
 #if defined(DEBUG) || defined(_DEBUG)
 	// Do we want a console window?  Probably only in debug mode
@@ -218,13 +218,7 @@ void Game::OnResize()
 	// Handle base-level DX resize stuff
 	DXCore::OnResize();
 
-	// Update our projection matrix since the window size changed
-	XMMATRIX P = XMMatrixPerspectiveFovLH(
-		0.25f * 3.1415926535f,	// Field of View Angle
-		(float)width / height,	// Aspect ratio
-		0.1f,				  	// Near clip plane distance
-		100.0f);			  	// Far clip plane distance
-	XMStoreFloat4x4(&projectionMatrix, XMMatrixTranspose(P)); // Transpose for HLSL!
+	camera->UpdateProjectionMatrix((float)width, (float)height);
 }
 
 // --------------------------------------------------------
@@ -365,6 +359,10 @@ void Game::OnMouseUp(WPARAM buttonState, int x, int y)
 void Game::OnMouseMove(WPARAM buttonState, int x, int y)
 {
 	// Add any custom code here...
+	if (buttonState & 0x0002)
+	{ /* Right button is down */
+		camera->RotateCamera((y - prevMousePos.y) * 0.005f, (x - prevMousePos.x) * 0.005f);
+	}
 
 	// Save the previous mouse position, so we have it for the future
 	prevMousePos.x = x;

@@ -16,6 +16,10 @@ public:
 
 	void Update(float deltaTime, float totalTime);
 
+	void RotateCamera(float x, float y);
+
+	void UpdateProjectionMatrix(float width, float height);
+
 	XMFLOAT4X4 GetViewMatrix();
 	XMFLOAT4X4 GetProjectionMatrix();
 
