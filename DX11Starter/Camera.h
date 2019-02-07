@@ -3,8 +3,6 @@
 #include "DXCore.h"
 #include <DirectXMath.h>
 
-#include "Mesh.h"
-
 using namespace DirectX;
 
 class Camera
