@@ -8,6 +8,7 @@
 #include "GameEntity.h"
 #include "Camera.h"
 #include "Material.h"
+#include "Lights.h"
 
 class Game 
 	: public DXCore
@@ -62,6 +63,9 @@ private:
 	Camera* camera;
 
 	Material* defaultMaterial;
+
+	//Lights
+	DirectionalLight directionalLight;
 
 };
 

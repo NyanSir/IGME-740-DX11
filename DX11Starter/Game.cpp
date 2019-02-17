@@ -37,6 +37,8 @@ Game::Game(HINSTANCE hInstance)
 
 	camera = new Camera((float)width, (float)height);
 
+	directionalLight = { XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f), XMFLOAT4(0, 0, 1, 1), XMFLOAT3(1, -1, 0) };
+
 #if defined(DEBUG) || defined(_DEBUG)
 	// Do we want a console window?  Probably only in debug mode
 	CreateConsoleWindow(500, 120, 32, 120);
@@ -294,6 +296,12 @@ void Game::Draw(float deltaTime, float totalTime)
 		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
 		1.0f,
 		0);
+
+	pixelShader->SetData(
+		¡°light¡±,  // The name of the (eventual) variable in the shader
+		&directionalLight,   // The address of the data to copy
+		sizeof(DirectionalLight)); // The size of the data to copy
+
 	
 	for (int i = 0; i < 1; i++) 
 	{
