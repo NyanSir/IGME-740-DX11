@@ -196,8 +196,8 @@ Mesh::Mesh(char* objFile, ID3D11Device* device)
 	// - Yes, the indices are a bit redundant here (one per vertex).  Could you skip using
 	//    an index buffer in this case?  Sure!  Though, if your mesh class assumes you have
 	//    one, you'll need to write some extra code to handle cases when you don't.
-	vertexCount = verts.size();
-	indexCount = indices.size();
+	vertexCount = (int)verts.size();
+	indexCount = (int)indices.size();
 	CreateBuffers(&verts[0], &indices[0], device);
 }
 
