@@ -27,6 +27,8 @@ Game::Game(HINSTANCE hInstance)
 	square = 0;
 	hexagon = 0;
 
+	cube = 0;
+
 	for (int i = 0; i < 5; i++) {
 		gameEntities[i] = 0;
 	}
@@ -56,6 +58,8 @@ Game::~Game()
 	delete triangle;
 	delete square;
 	delete hexagon;
+
+	delete cube;
 
 	for (int i = 0; i < 5; i++) 
 	{
@@ -118,7 +122,7 @@ void Game::CreateMatrices()
 	//    an identity matrix.  This is just to show that HLSL expects a different
 	//    matrix (column major vs row major) than the DirectX Math library
 	XMMATRIX W = XMMatrixIdentity();
-	XMStoreFloat4x4(&worldMatrix, XMMatrixTranspose(W)); // Transpose for HLSL!
+	DirectX::XMStoreFloat4x4(&worldMatrix, XMMatrixTranspose(W)); // Transpose for HLSL!
 
 	// Create the View matrix
 	// - In an actual game, recreate this matrix every time the camera 
@@ -134,7 +138,7 @@ void Game::CreateMatrices()
 		pos,     // The position of the "camera"
 		dir,     // Direction the camera is looking
 		up);     // "Up" direction in 3D space (prevents roll)
-	XMStoreFloat4x4(&viewMatrix, XMMatrixTranspose(V)); // Transpose for HLSL!
+	DirectX::XMStoreFloat4x4(&viewMatrix, XMMatrixTranspose(V)); // Transpose for HLSL!
 
 	// Create the Projection matrix
 	// - This should match the window's aspect ratio, and also update anytime
@@ -144,7 +148,7 @@ void Game::CreateMatrices()
 		(float)width / height,		// Aspect ratio
 		0.1f,						// Near clip plane distance
 		100.0f);					// Far clip plane distance
-	XMStoreFloat4x4(&projectionMatrix, XMMatrixTranspose(P)); // Transpose for HLSL!
+	DirectX::XMStoreFloat4x4(&projectionMatrix, XMMatrixTranspose(P)); // Transpose for HLSL!
 }
 
 
@@ -177,7 +181,7 @@ void Game::CreateBasicGeometry()
 	// - Indices are technically not required if the vertices are in the buffer 
 	//    in the correct order and each one will be used exactly once
 	// - But just to see how it's done...
-	int triangleIndices[] = { 0, 1, 2 };
+	UINT triangleIndices[] = { 0, 1, 2 };
 
 	triangle = new Mesh(triangleVertices, 3, triangleIndices, 3, device);
 
@@ -188,7 +192,7 @@ void Game::CreateBasicGeometry()
 		{ XMFLOAT3(-1.0f, -1.0f, +0.0f), normal, uv },
 		{ XMFLOAT3(-1.0f, +1.0f, +0.0f), normal, uv },
 	};
-	int squareIndices[] = { 0, 1, 2, 0, 2, 3 };
+	UINT squareIndices[] = { 0, 1, 2, 0, 2, 3 };
 	square = new Mesh(squareVertices, 4, squareIndices, 6, device);
 
 	Vertex hexagonVertices[] =
@@ -201,10 +205,15 @@ void Game::CreateBasicGeometry()
 		{ XMFLOAT3(-1.0f, +0.0f, +0.0f), normal, uv },
 		{ XMFLOAT3(-0.5f, +1.0f, +0.0f), normal, uv },
 	};
-	int hexagonIndices[] = { 0, 1, 2, 0, 2, 3, 0, 3, 4, 0, 4, 5, 0, 5, 6, 0, 6, 1 };
+	UINT hexagonIndices[] = { 0, 1, 2, 0, 2, 3, 0, 3, 4, 0, 4, 5, 0, 5, 6, 0, 6, 1 };
 	hexagon = new Mesh(hexagonVertices, 7, hexagonIndices, 18, device);
+
+	//Import models
+	cube = new Mesh("../../Assets/Models/cube.obj", device);
 	
-	gameEntities[0] = new GameEntity(hexagon, defaultMaterial);
+	//gameEntities[0] = new GameEntity(hexagon, defaultMaterial);
+	gameEntities[0] = new GameEntity(cube, defaultMaterial);
+
 	gameEntities[1] = new GameEntity(hexagon, defaultMaterial);
 	gameEntities[2] = new GameEntity(triangle, defaultMaterial);
 	gameEntities[3] = new GameEntity(square, defaultMaterial);

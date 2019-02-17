@@ -11,7 +11,7 @@ using namespace DirectX;
 //
 // hInstance - the application's OS-level handle (unique ID)
 // --------------------------------------------------------
-Mesh::Mesh(Vertex* vertices, int vCount, int* indices, int iCount, ID3D11Device* device)
+Mesh::Mesh(Vertex* vertices, int vCount, UINT* indices, int iCount, ID3D11Device* device)
 {
 	// Initialize fields
 	vertexBuffer = 0;
@@ -25,6 +25,10 @@ Mesh::Mesh(Vertex* vertices, int vCount, int* indices, int iCount, ID3D11Device*
 
 Mesh::Mesh(char* objFile, ID3D11Device* device)
 {
+	// Initialize fields
+	vertexBuffer = 0;
+	indexBuffer = 0;
+
 	// File input object
 	std::ifstream obj(objFile);
 
@@ -40,7 +44,7 @@ Mesh::Mesh(char* objFile, ID3D11Device* device)
 	std::vector<UINT> indices;           // Indices of these verts
 	unsigned int vertCounter = 0;        // Count of vertices/indices
 	char chars[100];                     // String for line reading
-
+	
 										 // Still have data left?
 	while (obj.good())
 	{
@@ -192,7 +196,9 @@ Mesh::Mesh(char* objFile, ID3D11Device* device)
 	// - Yes, the indices are a bit redundant here (one per vertex).  Could you skip using
 	//    an index buffer in this case?  Sure!  Though, if your mesh class assumes you have
 	//    one, you'll need to write some extra code to handle cases when you don't.
-	CreateBuffers(&verts[0], (int*)&indices[0], device);
+	vertexCount = verts.size();
+	indexCount = indices.size();
+	CreateBuffers(&verts[0], &indices[0], device);
 }
 
 // --------------------------------------------------------
@@ -208,7 +214,7 @@ Mesh::~Mesh()
 	if (indexBuffer) { indexBuffer->Release(); }
 }
 
-void Mesh::CreateBuffers(Vertex* vertices, int* indices, ID3D11Device* device)
+void Mesh::CreateBuffers(Vertex* vertices, UINT* indices, ID3D11Device* device)
 {
 	// Create the VERTEX BUFFER description -----------------------------------
 	// - The description is created on the stack because we only need

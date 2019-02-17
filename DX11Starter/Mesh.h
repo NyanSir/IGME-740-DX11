@@ -13,11 +13,11 @@ class Mesh
 {
 
 public:
-	Mesh(Vertex* vertices, int vCount, int* indices, int iCount, ID3D11Device* device);
+	Mesh(Vertex* vertices, int vCount, UINT* indices, int iCount, ID3D11Device* device);
 	Mesh(char* objFile, ID3D11Device* device);
 	~Mesh();
 	
-	void CreateBuffers(Vertex* vertices, int* indices, ID3D11Device* device);
+	void CreateBuffers(Vertex* vertices, UINT* indices, ID3D11Device* device);
 	void Draw(ID3D11DeviceContext* context);
 
 	ID3D11Buffer* GetVertexBuffer();

@@ -49,9 +49,13 @@ private:
 	// determining how far the mouse moved in a single frame.
 	POINT prevMousePos;
 
+	//Geometries
 	Mesh* triangle;
 	Mesh* square;
 	Mesh* hexagon;
+
+	//Models
+	Mesh* cube;
 
 	GameEntity* gameEntities[5];
 
