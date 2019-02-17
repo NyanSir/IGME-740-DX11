@@ -1,4 +1,16 @@
 
+struct DirectionalLight
+{
+	float4 AmbientColor;
+	float4 DiffuseColor;
+	float3 Direction;
+};
+
+cbuffer externalData : register(b0)
+{
+	DirectionalLight light;
+};
+
 // Struct representing the data we expect to receive from earlier pipeline stages
 // - Should match the output of our corresponding vertex shader
 // - The name of the struct itself is unimportant
@@ -12,6 +24,7 @@ struct VertexToPixel
 	//  |    |                |
 	//  v    v                v
 	float4 position		: SV_POSITION;
+	float3 normal		: NORMAL;
 };
 
 // --------------------------------------------------------
@@ -31,5 +44,14 @@ float4 main(VertexToPixel input) : SV_TARGET
 	//   of the triangle we're rendering
 	//return input.color;
 
-	return float4(1, 0, 0, 1);
+	//return float4(1, 0, 0, 1);
+
+	// Creates a float4 from a float3 and one more value
+	//return light.DiffuseColor; // This line should be temporary
+
+	float3 direction = normalize(-light.Direction);
+	float4 amount = saturate(dot(input.normal, direction));
+
+	return amount * light.DiffuseColor + light.AmbientColor;
+
 }
