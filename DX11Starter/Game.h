@@ -65,7 +65,8 @@ private:
 	Material* defaultMaterial;
 
 	//Lights
-	DirectionalLight directionalLight;
+	DirectionalLight directionalLight_1;
+	DirectionalLight directionalLight_2;
 
 };
 

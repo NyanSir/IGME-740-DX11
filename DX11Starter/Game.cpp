@@ -37,7 +37,8 @@ Game::Game(HINSTANCE hInstance)
 
 	camera = new Camera((float)width, (float)height);
 
-	directionalLight = { XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f), XMFLOAT4(0, 0, 1, 1), XMFLOAT3(1, -1, 0) };
+	directionalLight_1 = { XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f), XMFLOAT4(0, 0, 1, 1), XMFLOAT3(1, -1, 0) };
+	directionalLight_2 = { XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f), XMFLOAT4(1, 0, 0, 1), XMFLOAT3(-1, 1, 0) };
 
 #if defined(DEBUG) || defined(_DEBUG)
 	// Do we want a console window?  Probably only in debug mode
@@ -97,8 +98,13 @@ void Game::Init()
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	pixelShader->SetData(
-		"light",  // The name of the (eventual) variable in the shader
-		&directionalLight,   // The address of the data to copy
+		"light_1",  // The name of the (eventual) variable in the shader
+		&directionalLight_1,   // The address of the data to copy
+		sizeof(DirectionalLight)); // The size of the data to copy
+
+	pixelShader->SetData(
+		"light_2",  // The name of the (eventual) variable in the shader
+		&directionalLight_2,   // The address of the data to copy
 		sizeof(DirectionalLight)); // The size of the data to copy
 }
 
@@ -221,7 +227,7 @@ void Game::CreateBasicGeometry()
 	hexagon = new Mesh(hexagonVertices, 7, hexagonIndices, 18, device);
 
 	//Import models
-	models[0] = new Mesh("../../Assets/Models/sphere.obj", device);
+	models[0] = new Mesh("../../Assets/Models/torus.obj", device);
 	models[1] = new Mesh("../../Assets/Models/cube.obj", device);
 	models[2] = new Mesh("../../Assets/Models/cone.obj", device);
 	models[3] = new Mesh("../../Assets/Models/cylinder.obj", device);
@@ -240,7 +246,7 @@ void Game::CreateBasicGeometry()
 	gameEntities[3] = new GameEntity(models[3], defaultMaterial);
 	gameEntities[4] = new GameEntity(models[4], defaultMaterial);
 
-	gameEntities[0]->SetTranslation(0, 0, -3);
+	gameEntities[0]->SetTranslation(0, -0.5f, -2);
 }
 
 
@@ -280,6 +286,9 @@ void Game::Update(float deltaTime, float totalTime)
 	//gameEntities[3]->SetScale(sinTime, sinTime, sinTime);
 
 	//gameEntities[4]->SetTranslation(0, sin(totalTime), 0);
+
+	//Rotate
+	gameEntities[0]->SetRotation(0, totalTime, 0);
 
 	camera->Update(deltaTime, totalTime);
 }

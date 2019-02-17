@@ -8,7 +8,8 @@ struct DirectionalLight
 
 cbuffer externalData : register(b0)
 {
-	DirectionalLight light;
+	DirectionalLight light_1;
+	DirectionalLight light_2;
 };
 
 // Struct representing the data we expect to receive from earlier pipeline stages
@@ -49,9 +50,14 @@ float4 main(VertexToPixel input) : SV_TARGET
 	// Creates a float4 from a float3 and one more value
 	//return light.DiffuseColor; // This line should be temporary
 
-	float3 direction = normalize(-light.Direction);
-	float4 amount = saturate(dot(input.normal, direction));
+	input.normal = normalize(input.normal);
 
-	return amount * light.DiffuseColor + light.AmbientColor;
+	float3 direction_1 = normalize(-light_1.Direction);
+	float4 amount_1 = saturate(dot(input.normal, direction_1));
+
+	float3 direction_2 = normalize(-light_2.Direction);
+	float4 amount_2 = saturate(dot(input.normal, direction_2));
+
+	return (amount_1 * light_1.DiffuseColor + light_1.AmbientColor) + (amount_2 * light_2.DiffuseColor + light_2.AmbientColor);
 
 }
