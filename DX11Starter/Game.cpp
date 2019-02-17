@@ -159,14 +159,17 @@ void Game::CreateBasicGeometry()
 	XMFLOAT4 green = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 	XMFLOAT4 blue = XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
 
+	XMFLOAT3 normal = XMFLOAT3(0, 0, -1);
+	XMFLOAT2 uv = XMFLOAT2(0, 0);
+
 	// Set up the vertices of the triangle we would like to draw
 	// - We're going to copy this array, exactly as it exists in memory
 	//    over to a DirectX-controlled data structure (the vertex buffer)
 	Vertex triangleVertices[] =
 	{
-		{ XMFLOAT3(+0.0f, +1.0f, +0.0f), red },
-		{ XMFLOAT3(+1.5, -1.0f, +0.0f), red },
-		{ XMFLOAT3(-1.5f, -1.0f, +0.0f), red },
+		{ XMFLOAT3(+0.0f, +1.0f, +0.0f), normal, uv },
+		{ XMFLOAT3(+1.5, -1.0f, +0.0f), normal, uv },
+		{ XMFLOAT3(-1.5f, -1.0f, +0.0f), normal, uv },
 	};
 
 	// Set up the indices, which tell us which vertices to use and in which order
@@ -180,23 +183,23 @@ void Game::CreateBasicGeometry()
 
 	Vertex squareVertices[] =
 	{
-		{ XMFLOAT3(+1.0f, +1.0f, +0.0f), blue },
-		{ XMFLOAT3(+1.0f, -1.0f, +0.0f), blue },
-		{ XMFLOAT3(-1.0f, -1.0f, +0.0f), blue },
-		{ XMFLOAT3(-1.0f, +1.0f, +0.0f), blue },
+		{ XMFLOAT3(+1.0f, +1.0f, +0.0f), normal, uv },
+		{ XMFLOAT3(+1.0f, -1.0f, +0.0f), normal, uv },
+		{ XMFLOAT3(-1.0f, -1.0f, +0.0f), normal, uv },
+		{ XMFLOAT3(-1.0f, +1.0f, +0.0f), normal, uv },
 	};
 	int squareIndices[] = { 0, 1, 2, 0, 2, 3 };
 	square = new Mesh(squareVertices, 4, squareIndices, 6, device);
 
 	Vertex hexagonVertices[] =
 	{
-		{ XMFLOAT3(+0.0f, +0.0f, +0.0f), green },
-		{ XMFLOAT3(+0.5f, +1.0f, +0.0f), green },
-		{ XMFLOAT3(+1.0f, +0.0f, +0.0f), green },
-		{ XMFLOAT3(+0.5f, -1.0f, +0.0f), green },
-		{ XMFLOAT3(-0.5f, -1.0f, +0.0f), green },
-		{ XMFLOAT3(-1.0f, +0.0f, +0.0f), green },
-		{ XMFLOAT3(-0.5f, +1.0f, +0.0f), green },
+		{ XMFLOAT3(+0.0f, +0.0f, +0.0f), normal, uv },
+		{ XMFLOAT3(+0.5f, +1.0f, +0.0f), normal, uv },
+		{ XMFLOAT3(+1.0f, +0.0f, +0.0f), normal, uv },
+		{ XMFLOAT3(+0.5f, -1.0f, +0.0f), normal, uv },
+		{ XMFLOAT3(-0.5f, -1.0f, +0.0f), normal, uv },
+		{ XMFLOAT3(-1.0f, +0.0f, +0.0f), normal, uv },
+		{ XMFLOAT3(-0.5f, +1.0f, +0.0f), normal, uv },
 	};
 	int hexagonIndices[] = { 0, 1, 2, 0, 2, 3, 0, 3, 4, 0, 4, 5, 0, 5, 6, 0, 6, 1 };
 	hexagon = new Mesh(hexagonVertices, 7, hexagonIndices, 18, device);
