@@ -27,7 +27,9 @@ Game::Game(HINSTANCE hInstance)
 	square = 0;
 	hexagon = 0;
 
-	cube = 0;
+	for (int i = 0; i < 6; i++) {
+		models[i] = 0;
+	}
 
 	for (int i = 0; i < 5; i++) {
 		gameEntities[i] = 0;
@@ -59,7 +61,10 @@ Game::~Game()
 	delete square;
 	delete hexagon;
 
-	delete cube;
+	for (int i = 0; i < 6; i++)
+	{
+		delete models[i];
+	}
 
 	for (int i = 0; i < 5; i++) 
 	{
@@ -209,15 +214,26 @@ void Game::CreateBasicGeometry()
 	hexagon = new Mesh(hexagonVertices, 7, hexagonIndices, 18, device);
 
 	//Import models
-	cube = new Mesh("../../Assets/Models/cube.obj", device);
+	models[0] = new Mesh("../../Assets/Models/sphere.obj", device);
+	models[1] = new Mesh("../../Assets/Models/cube.obj", device);
+	models[2] = new Mesh("../../Assets/Models/cone.obj", device);
+	models[3] = new Mesh("../../Assets/Models/cylinder.obj", device);
+	models[4] = new Mesh("../../Assets/Models/helix.obj", device);
+	models[5] = new Mesh("../../Assets/Models/torus.obj", device);
 	
 	//gameEntities[0] = new GameEntity(hexagon, defaultMaterial);
-	gameEntities[0] = new GameEntity(cube, defaultMaterial);
+	//gameEntities[1] = new GameEntity(hexagon, defaultMaterial);
+	//gameEntities[2] = new GameEntity(triangle, defaultMaterial);
+	//gameEntities[3] = new GameEntity(square, defaultMaterial);
+	//gameEntities[4] = new GameEntity(square, defaultMaterial);
 
-	gameEntities[1] = new GameEntity(hexagon, defaultMaterial);
-	gameEntities[2] = new GameEntity(triangle, defaultMaterial);
-	gameEntities[3] = new GameEntity(square, defaultMaterial);
-	gameEntities[4] = new GameEntity(square, defaultMaterial);
+	gameEntities[0] = new GameEntity(models[0], defaultMaterial);
+	gameEntities[1] = new GameEntity(models[1], defaultMaterial);
+	gameEntities[2] = new GameEntity(models[2], defaultMaterial);
+	gameEntities[3] = new GameEntity(models[3], defaultMaterial);
+	gameEntities[4] = new GameEntity(models[4], defaultMaterial);
+
+	gameEntities[0]->SetTranslation(0, 0, -3);
 }
 
 
@@ -242,21 +258,21 @@ void Game::Update(float deltaTime, float totalTime)
 	if (GetAsyncKeyState(VK_ESCAPE))
 		Quit();
 
-	float sinTime = (sin(totalTime * 2.0f) + 5.0f) / 10.0f;
+	//float sinTime = (sin(totalTime * 2.0f) + 5.0f) / 10.0f;
 
-	gameEntities[0]->SetTranslation(sin(totalTime), sin(totalTime), 0);
-	gameEntities[0]->SetRotation(0, 0, totalTime);
-	gameEntities[0]->SetScale(sinTime, sinTime, sinTime);
+	//gameEntities[0]->SetTranslation(sin(totalTime), sin(totalTime), 0);
+	//gameEntities[0]->SetRotation(0, 0, totalTime);
+	//gameEntities[0]->SetScale(sinTime, sinTime, sinTime);
 
-	gameEntities[1]->SetTranslation(-totalTime / 2.0f, 0, 0);
+	//gameEntities[1]->SetTranslation(-totalTime / 2.0f, 0, 0);
 
-	gameEntities[2]->SetRotation(0, 0, totalTime);
-	gameEntities[2]->SetScale(0.5f, 0.5f, 0.5f);
+	//gameEntities[2]->SetRotation(0, 0, totalTime);
+	//gameEntities[2]->SetScale(0.5f, 0.5f, 0.5f);
 
-	gameEntities[3]->SetTranslation(2, 0, 0);
-	gameEntities[3]->SetScale(sinTime, sinTime, sinTime);
+	//gameEntities[3]->SetTranslation(2, 0, 0);
+	//gameEntities[3]->SetScale(sinTime, sinTime, sinTime);
 
-	gameEntities[4]->SetTranslation(0, sin(totalTime), 0);
+	//gameEntities[4]->SetTranslation(0, sin(totalTime), 0);
 
 	camera->Update(deltaTime, totalTime);
 }
@@ -279,7 +295,7 @@ void Game::Draw(float deltaTime, float totalTime)
 		1.0f,
 		0);
 	
-	for (int i = 0; i < 5; i++) 
+	for (int i = 0; i < 1; i++) 
 	{
 		gameEntities[i]->PrepareMaterial(camera->GetViewMatrix(), camera->GetProjectionMatrix());
 

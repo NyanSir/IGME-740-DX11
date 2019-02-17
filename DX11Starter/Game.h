@@ -55,7 +55,7 @@ private:
 	Mesh* hexagon;
 
 	//Models
-	Mesh* cube;
+	Mesh* models[6];
 
 	GameEntity* gameEntities[5];
 
