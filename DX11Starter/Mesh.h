@@ -3,6 +3,10 @@
 #include "DXCore.h"
 #include <DirectXMath.h>
 
+#include <vector>
+#include <iostream>
+#include <fstream>
+
 #include "Vertex.h"
 
 class Mesh
@@ -10,8 +14,10 @@ class Mesh
 
 public:
 	Mesh(Vertex* vertices, int vCount, int* indices, int iCount, ID3D11Device* device);
+	Mesh(char* objFile, ID3D11Device* device);
 	~Mesh();
 	
+	void CreateBuffers(Vertex* vertices, int* indices, ID3D11Device* device);
 	void Draw(ID3D11DeviceContext* context);
 
 	ID3D11Buffer* GetVertexBuffer();
