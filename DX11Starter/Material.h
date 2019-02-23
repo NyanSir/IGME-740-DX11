@@ -8,7 +8,7 @@ class Material
 {
 
 public:
-	Material(SimpleVertexShader* vShader, SimplePixelShader* pShader);
+	Material(SimpleVertexShader* vShader, SimplePixelShader* pShader, ID3D11ShaderResourceView* rView, ID3D11SamplerState* sState);
 	~Material();
 
 	SimpleVertexShader* GetVertexShader();
@@ -18,5 +18,9 @@ private:
 	// Buffers to hold actual geometry data
 	SimpleVertexShader* vertexShader;
 	SimplePixelShader* pixelShader;
+
+	//Textures
+	ID3D11ShaderResourceView* resourceView;
+	ID3D11SamplerState* samplerState;
 
 };

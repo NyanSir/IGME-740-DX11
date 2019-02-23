@@ -10,6 +10,9 @@
 #include "Material.h"
 #include "Lights.h"
 
+// DirectX Tool Kit headers
+#include "WICTextureLoader.h" // WIC = Windows Imaging Component
+
 class Game 
 	: public DXCore
 {

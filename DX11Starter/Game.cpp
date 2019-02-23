@@ -1,8 +1,5 @@
 #include "Game.h"
 
-// DirectX Tool Kit headers
-#include "WICTextureLoader.h" // WIC = Windows Imaging Component
-
 // For the DirectX Math library
 using namespace DirectX;
 
@@ -134,7 +131,7 @@ void Game::Init()
 	device->CreateSamplerState(&sampDesc, &sampler);
 
 	//Create a default material
-	defaultMaterial = new Material(vertexShader, pixelShader);
+	defaultMaterial = new Material(vertexShader, pixelShader, crateSRV, sampler);
 }
 
 // --------------------------------------------------------
