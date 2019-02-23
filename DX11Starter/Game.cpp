@@ -27,6 +27,9 @@ Game::Game(HINSTANCE hInstance)
 	square = 0;
 	hexagon = 0;
 
+	defaultSRV = 0;
+	sampler = 0;
+
 	for (int i = 0; i < 6; i++) {
 		models[i] = 0;
 	}
@@ -63,6 +66,9 @@ Game::~Game()
 	delete triangle;
 	delete square;
 	delete hexagon;
+
+	if (defaultSRV) { defaultSRV->Release(); }
+	if (sampler) { sampler->Release(); }
 
 	for (int i = 0; i < 6; i++)
 	{
