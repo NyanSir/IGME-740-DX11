@@ -1,5 +1,8 @@
 #include "Game.h"
 
+// DirectX Tool Kit headers
+#include "WICTextureLoader.h" // WIC = Windows Imaging Component
+
 // For the DirectX Math library
 using namespace DirectX;
 
@@ -98,14 +101,40 @@ void Game::Init()
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	pixelShader->SetData(
-		"light_1",  // The name of the (eventual) variable in the shader
-		&directionalLight_1,   // The address of the data to copy
-		sizeof(DirectionalLight)); // The size of the data to copy
+		"light_1",					// The name of the (eventual) variable in the shader
+		&directionalLight_1,		// The address of the data to copy
+		sizeof(DirectionalLight));	// The size of the data to copy
 
 	pixelShader->SetData(
-		"light_2",  // The name of the (eventual) variable in the shader
-		&directionalLight_2,   // The address of the data to copy
-		sizeof(DirectionalLight)); // The size of the data to copy
+		"light_2",					// The name of the (eventual) variable in the shader
+		&directionalLight_2,		// The address of the data to copy
+		sizeof(DirectionalLight));	// The size of the data to copy
+
+
+	// Load some textures
+	CreateWICTextureFromFile(
+		device,									// The Direct3D device for resource creation
+		context,								// Rendering context (this will auto-generate mip maps!!!)
+		L"../../Assets/Textures/crate.png",		// Path to the file ("L" means wide characters)
+		0,										// Texture ref?  No thanks!  (0 means we don't want an extra ref)
+		&crateSRV);								// Actual SRV for use with shaders
+
+	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/rusty.jpg", 0, &rustSRV);
+	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/rustySpec.png", 0, &specSRV);
+
+	// Create a sampler state for sampling options
+	D3D11_SAMPLER_DESC sampDesc = {};					// " = {}" fills the whole struct with zeros!
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;	//D3D11_FILTER_MIN_MAG_MIP_LINEAR;	// Tri-linear filtering
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;				// This will ensure mip maps are used!
+	//sampDesc.MaxAnisotropy = 16;						// Must be set for anisotropic filtering
+
+	device->CreateSamplerState(&sampDesc, &sampler);
+
+	//Create a default material
+	defaultMaterial = new Material(vertexShader, pixelShader);
 }
 
 // --------------------------------------------------------
@@ -121,8 +150,6 @@ void Game::LoadShaders()
 
 	pixelShader = new SimplePixelShader(device, context);
 	pixelShader->LoadShaderFile(L"PixelShader.cso");
-
-	defaultMaterial = new Material(vertexShader, pixelShader);
 }
 
 

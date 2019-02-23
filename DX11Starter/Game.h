@@ -68,5 +68,11 @@ private:
 	DirectionalLight directionalLight_1;
 	DirectionalLight directionalLight_2;
 
+	//Textures
+	ID3D11ShaderResourceView* crateSRV;
+	ID3D11ShaderResourceView* rustSRV;
+	ID3D11ShaderResourceView* specSRV;
+	ID3D11SamplerState* sampler;
+
 };
 
