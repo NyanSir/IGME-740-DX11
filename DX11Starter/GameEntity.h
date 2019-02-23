@@ -17,7 +17,7 @@ public:
 	Mesh* mesh;
 	Material* material;
 
-	void PrepareMaterial(XMFLOAT4X4 viewMatrix, XMFLOAT4X4 projectionMatrix);
+	void PrepareMaterial(XMFLOAT4X4 viewMatrix, XMFLOAT4X4 projectionMatrix, ID3D11ShaderResourceView* rView, ID3D11SamplerState* sState);
 
 	void SetWorldMatrix(XMFLOAT4X4 matrix) ;
 	void SetTranslation(float x, float y, float z);

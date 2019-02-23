@@ -23,7 +23,7 @@ GameEntity::~GameEntity()
 	
 }
 
-void GameEntity::PrepareMaterial(XMFLOAT4X4 viewMatrix, XMFLOAT4X4 projectionMatrix)
+void GameEntity::PrepareMaterial(XMFLOAT4X4 viewMatrix, XMFLOAT4X4 projectionMatrix, ID3D11ShaderResourceView* rView, ID3D11SamplerState* sState)
 {
 	// Send data to shader variables
 	//  - Do this ONCE PER OBJECT you're drawing
@@ -46,6 +46,9 @@ void GameEntity::PrepareMaterial(XMFLOAT4X4 viewMatrix, XMFLOAT4X4 projectionMat
 	//    you'll need to swap the current shaders before each draw
 	material->GetVertexShader()->SetShader();
 	material->GetPixelShader()->SetShader();
+
+	material->GetPixelShader()->SetSamplerState("BasicSampler", sState);
+	material->GetPixelShader()->SetShaderResourceView("DiffuseTexture", rView);
 }
 
 void GameEntity::SetWorldMatrix(XMFLOAT4X4 matrix)

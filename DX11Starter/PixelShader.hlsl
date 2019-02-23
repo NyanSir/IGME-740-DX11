@@ -13,8 +13,8 @@ cbuffer externalData : register(b0)
 };
 
 //Texture global variables
-Texture2D diffuseTexture  : register(t0);
-SamplerState basicSampler : register(s0);
+Texture2D DiffuseTexture  : register(t0);
+SamplerState BasicSampler : register(s0);
 
 
 // Struct representing the data we expect to receive from earlier pipeline stages
@@ -58,7 +58,7 @@ float4 main(VertexToPixel input) : SV_TARGET
 
 	input.normal = normalize(input.normal);
 
-	float4 surfaceColor = diffuseTexture.Sample(basicSampler, input.uv);
+	float4 surfaceColor = DiffuseTexture.Sample(BasicSampler, input.uv);
 
 	float3 direction_1 = normalize(-light_1.Direction);
 	float4 amount_1 = saturate(dot(input.normal, direction_1));
@@ -66,6 +66,6 @@ float4 main(VertexToPixel input) : SV_TARGET
 	float3 direction_2 = normalize(-light_2.Direction);
 	float4 amount_2 = saturate(dot(input.normal, direction_2));
 
-	return (amount_1 * light_1.DiffuseColor + light_1.AmbientColor) + (amount_2 * light_2.DiffuseColor + light_2.AmbientColor);
+	return ((amount_1 * light_1.DiffuseColor + light_1.AmbientColor) + (amount_2 * light_2.DiffuseColor + light_2.AmbientColor)) * surfaceColor;
 
 }
