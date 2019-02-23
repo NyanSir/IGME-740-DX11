@@ -66,6 +66,6 @@ float4 main(VertexToPixel input) : SV_TARGET
 	float3 direction_2 = normalize(-light_2.Direction);
 	float4 amount_2 = saturate(dot(input.normal, direction_2));
 
-	return ((amount_1 * light_1.DiffuseColor + light_1.AmbientColor) + (amount_2 * light_2.DiffuseColor + light_2.AmbientColor)) * surfaceColor;
+	return (amount_1 * light_1.DiffuseColor + light_1.AmbientColor) + (amount_2 * light_2.DiffuseColor + light_2.AmbientColor);
 
 }

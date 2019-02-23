@@ -85,12 +85,8 @@ Game::~Game()
 // --------------------------------------------------------
 void Game::Init()
 {
-	// Helper methods for loading shaders, creating some basic
-	// geometry to draw and some simple camera matrices.
-	//  - You'll be expanding and/or replacing these later
+	// Load shaders
 	LoadShaders();
-	CreateMatrices();
-	CreateBasicGeometry();
 
 	// Tell the input assembler stage of the pipeline what kind of
 	// geometric primitives (points, lines or triangles) we want to draw.  
@@ -129,6 +125,10 @@ void Game::Init()
 
 	//Create a default material
 	defaultMaterial = new Material(vertexShader, pixelShader, defaultSRV, sampler);
+
+	//Create basic geometries
+	CreateMatrices();
+	CreateBasicGeometry();
 }
 
 // --------------------------------------------------------
