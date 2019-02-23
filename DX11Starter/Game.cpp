@@ -112,12 +112,9 @@ void Game::Init()
 	CreateWICTextureFromFile(
 		device,									// The Direct3D device for resource creation
 		context,								// Rendering context (this will auto-generate mip maps!!!)
-		L"../../Assets/Textures/crate.png",		// Path to the file ("L" means wide characters)
+		L"../../Assets/Textures/SmoothRock.jpg",// Path to the file ("L" means wide characters)
 		0,										// Texture ref?  No thanks!  (0 means we don't want an extra ref)
-		&crateSRV);								// Actual SRV for use with shaders
-
-	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/rusty.jpg", 0, &rustSRV);
-	CreateWICTextureFromFile(device, context, L"../../Assets/Textures/rustySpec.png", 0, &specSRV);
+		&defaultSRV);							// Actual SRV for use with shaders
 
 	// Create a sampler state for sampling options
 	D3D11_SAMPLER_DESC sampDesc = {};					// " = {}" fills the whole struct with zeros!
@@ -131,7 +128,7 @@ void Game::Init()
 	device->CreateSamplerState(&sampDesc, &sampler);
 
 	//Create a default material
-	defaultMaterial = new Material(vertexShader, pixelShader, crateSRV, sampler);
+	defaultMaterial = new Material(vertexShader, pixelShader, defaultSRV, sampler);
 }
 
 // --------------------------------------------------------
